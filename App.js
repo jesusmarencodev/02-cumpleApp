@@ -21,12 +21,12 @@ export default function App() {
   },[])
 
   if(user === undefined) return null;
-
+  
   return (
     <>
       <StatusBar barStyle="light-content"/>
       <SafeAreaView style = {styles.backgound}>
-        {user ? <ListCumple/>: <Auth/>}
+        {user ? <ListCumple user={user} />: <Auth/>}
       </SafeAreaView>
     </>
   )

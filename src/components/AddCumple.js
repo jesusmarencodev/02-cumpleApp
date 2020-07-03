@@ -5,9 +5,11 @@ import moment from 'moment';
 import firebase from '../utils/firebase';
 import 'firebase/firestore';
 
+firebase.firestore().settings({experimentalForceLongPolling: true});//esta configuracion es obligatoria para guardar en android
 const db = firebase.firestore(firebase);
 
-export default function AddCumple() {
+export default function AddCumple(props) {
+  const {user, setShowList, setReloadData} = props;
   const [isDatePicketVisible, setIsDatePicketVisible] = useState(false);
   const [formData, setFormData] = useState({});
   const [formError, setFormError] = useState({})
@@ -26,13 +28,14 @@ export default function AddCumple() {
       if(!formData.lastname) errors.lastname = true;
       if(!formData.dateBirth) errors.dateBirth = true;
     }else{
-      console.log("paso1")
       const data = formData;
       data.dateBirth.setYear(0);
-      console.log(data)
-      db.collection("cumples").add(data)
+      db.collection(user.uid)
+        .add(data)
         .then(()=>{
           console.log("OK")
+          setShowList(true);
+          setReloadData(true);
         })
         .catch((error)=>{
           console.log("error")
